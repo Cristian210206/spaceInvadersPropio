@@ -11,16 +11,11 @@ public class Nave extends ObjetoVolador {
 
     public boolean comprobarColisiones(List<Disparo> disparosEnemigos) {
         for (Disparo disparo: disparosEnemigos) {
-            if(disparo.getPosicionX() == this.getPosicionX() && disparo.getPosicionY() == this.getPosicionY()) {
+            if(disparo.getPosicionX() >= this.getPosicionX() && disparo.getPosicionX() <= this.getPosicionX()+getTamanioX() && disparo.getPosicionY() >= this.getPosicionY() && disparo.getPosicionY() <= this.getPosicionY()+getTamanioY()) {
                 disparosEnemigos.remove(disparo);
                 return true;
             }
         }
         return false;
-    }
-
-    public void disparar(List<Disparo> listaDisparos, Texture imagenDisparo) {
-        Disparo disparo = new Disparo(super.getPosicionX(),super.getPosicionY(),5,25,0,5,true,imagenDisparo);
-        listaDisparos.add(disparo);
     }
 }

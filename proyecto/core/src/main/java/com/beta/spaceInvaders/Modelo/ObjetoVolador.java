@@ -12,7 +12,7 @@ public class ObjetoVolador {
     private int velocidadY;
     private boolean activo;
     private Texture imagen;
-    public enum Direccion{ARRIBA,ABAJO,IZQUIERDA,DERECHA}
+    public enum Direccion{ARRIBA,ABAJO,IZQUIERDA,DERECHA,QUIETO}
 
     public ObjetoVolador(int posicionX, int posicionY, int tamanioX, int tamanioY, int velocidadX, int velocidadY, boolean activo, Texture imagen) {
         this.posicionX = posicionX;
@@ -57,6 +57,10 @@ public class ObjetoVolador {
         return activo;
     }
 
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
     public void pintarse(SpriteBatch batch) {
         batch.draw(imagen,posicionX,posicionY,tamanioX,tamanioY);
     }
@@ -80,7 +84,7 @@ public class ObjetoVolador {
             }
             case IZQUIERDA -> {
                 if (this.posicionX > distancia) {
-                    this.posicionX += distancia;
+                    this.posicionX -= distancia;
                     return true;
                 }
                 return false;

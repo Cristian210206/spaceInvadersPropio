@@ -8,7 +8,7 @@ import java.util.List;
 public class Player extends Personaje {
     private String nombre;
     private int puntuacion;
-    private List<Disparo> disparos;
+    public static List<Disparo> disparos;
 
     public Player(int posicionX, int posicionY, int tamanioX, int tamanioY, int velocidadX, int velocidadY, boolean activo, Texture imagen, int vidas, String nombre) {
         super(posicionX, posicionY, tamanioX, tamanioY, velocidadX, velocidadY, activo, imagen, vidas);
@@ -19,6 +19,11 @@ public class Player extends Personaje {
 
     public void aumentarPuntuacion(int cantidad) {
         this.puntuacion+=cantidad;
+    }
+
+    public void disparar(Texture imagenDisparo) {
+        Disparo disparo = new Disparo(super.getPosicionX(),super.getPosicionY()+super.getTamanioY(),5,10,0,1,true,imagenDisparo);
+        disparos.add(disparo);
     }
 
     public String getNombre() {

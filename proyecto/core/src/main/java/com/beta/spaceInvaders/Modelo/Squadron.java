@@ -1,13 +1,18 @@
 package com.beta.spaceInvaders.Modelo;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.beta.spaceInvaders.Vista.Game;
+
+import java.util.List;
 
 public class Squadron {
     private Enemigo[] enemigos;
+    public static final int NUMERO_ENEMIGOS = 8;
     private static final int MARGENES_ENEMIGOS = 70;
 
     public Squadron(Enemigo enemigo) {
-        enemigos = new Enemigo[8];
+        enemigos = new Enemigo[NUMERO_ENEMIGOS];
         crearSquadron(enemigo);
     }
 
@@ -21,7 +26,9 @@ public class Squadron {
     public void pintarSquadron(SpriteBatch batch) {
         if (enemigos != null) {
             for(Enemigo enemigo: enemigos) {
-                enemigo.pintarse(batch);
+                if(enemigo.getActivo()) {
+                    enemigo.pintarse(batch);
+                }
             }
         } else {
             throw new Error("No se ha creado el escuadron");
@@ -29,31 +36,36 @@ public class Squadron {
     }
 
     public boolean moverEnemigos(ObjetoVolador.Direccion direccion, int limite_X) {
-        if (enemigos != null) {
-            if (direccion == ObjetoVolador.Direccion.IZQUIERDA) {
-                for(Enemigo enemigo: enemigos) {
-                    if(!enemigo.moverse(enemigo.getVelocidadX(),direccion,limite_X) && enemigo.getActivo()) {
-                        return false;
-                    };
-                }
-            } else if (direccion == ObjetoVolador.Direccion.DERECHA) {
-                for (int i= enemigos.length-1; i >= 0; i--) {
-                    if(!enemigos[i].moverse(enemigos[i].getVelocidadX(),direccion,limite_X) && enemigos[i].getActivo()) {
-                        return false;
-                    }
+        if (direccion == ObjetoVolador.Direccion.IZQUIERDA) {
+            for(Enemigo enemigo: enemigos) {
+                if(!enemigo.moverse(enemigo.getVelocidadX(),direccion,limite_X)) {
+                    return false; // Corta el bucle en caso de que el de la izquierda del todo no pueda moverse
+                };
+            }
+        } else if (direccion == ObjetoVolador.Direccion.DERECHA) {
+            for (int i= enemigos.length-1; i >= 0; i--) {
+                if(!enemigos[i].moverse(enemigos[i].getVelocidadX(),direccion,limite_X)) {
+                    return false; // Corta el bucle en caso de que el de la derecha del todo no pueda moverse
                 }
             }
-        } else {
-            throw new Error("No se ha creado el escuadron");
         }
-        return false;
+        return true;
     }
 
-    public Enemigo[] getSquadron() {
-        Enemigo[] copiaSquadron = new Enemigo[enemigos.length];
-        for(int i = 0; i< copiaSquadron.length; i++) {
-            copiaSquadron[i] = enemigos[i];
+    public void dispararEnemigos(Texture imagenDisparo, List<Disparo> disparos) {
+        for(Enemigo enemigo: enemigos) {
+            if (enemigo.getActivo() && Math.random() > 0.9995) {
+                enemigo.disparar(imagenDisparo, disparos);
+            }
         }
-        return copiaSquadron;
+    }
+
+    public void morirEnemigo() {
+        for (Enemigo enemigo: enemigos) {
+            if (enemigo.getActivo() && enemigo.comprobarColisiones(Player.disparos)) {
+                enemigo.setActivo(false);
+                Game.NUMERO_ENEMIGOS--;
+            }
+        }
     }
 }

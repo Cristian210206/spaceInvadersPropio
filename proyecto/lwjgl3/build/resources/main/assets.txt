@@ -1,6 +1,12 @@
 .gitkeep
-Disparo.png
 Enemigo.png
+GameOver.jpg
+Inicio.png
 Player.png
+Victoria.jpg
+disparoAliado.jpg
+disparoEnemigo.jpg
+fondo.jpeg
 libgdx.png
 uv.png
+vida.png
